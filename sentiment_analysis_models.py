@@ -270,7 +270,7 @@ def load_and_preprocess_data(file_path, sample_size=10000, start_index=0):
     return X_train, X_test, y_train, y_test
 
 class LSTMModel:
-    def __init__(self, max_words=30000, max_len=300, embedding_dim=300):  # 增加词表大小和序列长度
+    def __init__(self, max_words=30000, max_len=300, embedding_dim=300):  # Increase vocabulary size and sequence length
         self.max_words = max_words
         self.max_len = max_len
         self.embedding_dim = embedding_dim
@@ -291,10 +291,10 @@ class LSTMModel:
     def build_model(self):
         """Build an improved LSTM model architecture"""
         model = Sequential([
-            # 增加词嵌入维度
+            # Increase embedding dimension
             Embedding(self.max_words, self.embedding_dim, input_length=self.max_len, mask_zero=True),
             
-            # 使用更深的LSTM层
+            # Use deeper LSTM layers
             tf.keras.layers.Bidirectional(LSTM(256, return_sequences=True)),
             tf.keras.layers.BatchNormalization(),
             Dropout(0.3),
@@ -307,7 +307,7 @@ class LSTMModel:
             tf.keras.layers.BatchNormalization(),
             Dropout(0.3),
             
-            # 增加全连接层
+            # Add fully connected layers
             Dense(128, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001)),
             tf.keras.layers.BatchNormalization(),
             Dropout(0.3),
@@ -316,11 +316,11 @@ class LSTMModel:
             tf.keras.layers.BatchNormalization(),
             Dropout(0.3),
             
-            # 输出层
+            # Output layer
             Dense(1, activation='sigmoid')
         ])
         
-        # 使用Adam优化器，但降低学习率
+        # Use Adam optimizer with reduced learning rate
         optimizer = tf.keras.optimizers.Adam(learning_rate=0.0005)
         
         model.compile(
@@ -337,10 +337,10 @@ class LSTMModel:
         # Convert all texts to strings and handle empty values
         texts = [str(text) if text is not None else '' for text in texts]
         
-        # 简单的文本清理
-        texts = [text.lower() for text in texts]  # 转小写
-        texts = [re.sub(r'[^\w\s]', ' ', text) for text in texts]  # 移除标点符号
-        texts = [re.sub(r'\s+', ' ', text).strip() for text in texts]  # 规范化空白字符
+        # Simple text cleaning
+        texts = [text.lower() for text in texts]  # Convert to lowercase
+        texts = [re.sub(r'[^\w\s]', ' ', text) for text in texts]  # Remove punctuation
+        texts = [re.sub(r'\s+', ' ', text).strip() for text in texts]  # Normalize whitespace
         
         # Fit tokenizer on texts
         self.tokenizer.fit_on_texts(texts)
@@ -434,7 +434,7 @@ class LSTMModel:
         callbacks = [
             tf.keras.callbacks.EarlyStopping(
                 monitor='val_accuracy',
-                patience=5,  # 增加早停的耐心值
+                patience=5,
                 restore_best_weights=True,
                 verbose=1
             ),
@@ -446,7 +446,7 @@ class LSTMModel:
             ),
             tf.keras.callbacks.ReduceLROnPlateau(
                 monitor='val_loss',
-                factor=0.2,  # 更激进的学习率衰减
+                factor=0.2,
                 patience=3,
                 min_lr=1e-6,
                 verbose=1
@@ -595,7 +595,7 @@ def compare_model_results(results_dict):
 def main():
     # Set data file path
     data_file = 'test.csv'
-    sample_size = 5000  # 增加训练数据量
+    sample_size = 10000
     
     try:
         # Load data
